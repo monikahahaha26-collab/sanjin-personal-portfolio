@@ -1,108 +1,18 @@
-import { Metadata } from "next";
 import Link from "next/link";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export const metadata: Metadata = {
-  title: "兴趣爱好",
-  description: "魔方工坊、游戏、读书与影视记录 —— 代码之外的日常。",
-};
+export const metadata = { title: "Off Duty" };
 
-const ITEMS = [
-  {
-    href: "/hobbies/cube",
-    title: "魔方工坊",
-    desc: "可拖拽旋转、真实层转动打乱的 3D 魔方，支持三套配色。",
-    icon: "🎲",
-    bg: "var(--color-accent-subtle)",
-    glow: "rgba(22, 163, 74, 0.1)",
-    featured: true,
-    label: "FEATURED · SPEEDCUBING",
-  },
-  {
-    href: "/hobbies/books",
-    title: "读书",
-    desc: "记录在读与已读书目：书名、作者、阅读状态、评分与短评。",
-    icon: "📚",
-    bg: "var(--color-bg-secondary)",
-    glow: "rgba(194, 65, 12, 0.1)",
-    label: "PERSONAL LIBRARY",
-  },
-  {
-    href: "/hobbies/movies",
-    title: "影视",
-    desc: "记录看过的电影与剧集：名称、观看状态、评分与短评。",
-    icon: "🎬",
-    bg: "var(--color-accent-subtle)",
-    glow: "rgba(37, 99, 235, 0.1)",
-    label: "SCREENING ROOM",
-  },
-  {
-    href: "/hobbies/games",
-    title: "游戏存档室",
-    desc: "收纳 Steam、手机与主机游戏，记录平台、进度、评分和每一次通关后的感受。",
-    icon: "🎮",
-    bg: "#E8F7C7",
-    glow: "rgba(163, 230, 53, 0.16)",
-    label: "STEAM · MOBILE · CONSOLE",
-  },
+const anime = [
+  { title: "葬送的芙莉莲", status: "WATCHING", genre: "奇幻 / 公路", note: "把漫长时间写得很轻，情绪却一直在。" },
+  { title: "孤独摇滚！", status: "COMPLETED", genre: "乐队 / 日常", note: "喜欢它把内耗变成具体、可笑又可爱的画面。" },
+  { title: "赛博朋克：边缘行者", status: "COMPLETED", genre: "科幻 / 动作", note: "节奏很猛，但角色关系留得住。" },
+];
+const games = [
+  { title: "塞尔达传说：旷野之息", platform: "Nintendo Switch", progress: "主线完成", rating: "9.5 / 10", note: "最喜欢在不被任务指挥的时候，自己找到一条路。" },
+  { title: "泰坦陨落 2", platform: "PC", progress: "战役通关", rating: "9 / 10", note: "关卡机制和移动手感都很干净。" },
+  { title: "鸣潮", platform: "Mobile / PC", progress: "持续游玩", rating: "8 / 10", note: "战斗反馈很直接，适合短时间进入状态。" },
 ];
 
 export default function HobbiesPage() {
-  return (
-    <section
-      style={{ padding: "var(--space-16) var(--space-6)", minHeight: "60vh" }}
-      aria-label="兴趣爱好"
-    >
-      <div style={{ maxWidth: "var(--container-max)", margin: "0 auto" }}>
-        <div
-          style={{ maxWidth: "var(--container-narrow)", margin: "0 auto var(--space-8)" }}
-        >
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "var(--space-2)",
-              fontSize: "var(--text-sm)",
-              fontWeight: 600,
-              color: "var(--color-text-secondary)",
-              textDecoration: "none",
-              marginBottom: "var(--space-8)",
-            }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M19 12H5M11 18l-6-6 6-6" />
-            </svg>
-            返回首页
-          </Link>
-          <SectionHeading
-            align="center"
-            subtitle="代码之外，也热爱转动、游玩与记录 —— 四个子模块随点随到。"
-          >
-            🧩 兴趣爱好
-          </SectionHeading>
-        </div>
-
-        <div className="module-grid hobbies-module-grid">
-          {ITEMS.map((m) => (
-            <Link key={m.href} href={m.href} className={`module-card hobbies-module-card reveal${m.featured ? " module-card-featured" : ""}`} style={{ ["--card-glow" as string]: m.glow }}>
-              <div className="module-card-top">
-                <span className="module-icon" style={{ background: m.bg }} aria-hidden="true">
-                  {m.icon}
-                </span>
-                <span className="module-go" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </span>
-              </div>
-              <span className="hobbies-module-label">{m.label}</span>
-              <h3>{m.title}</h3>
-              <p>{m.desc}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return <section className="page-console off-duty"><div className="container"><header className="page-title"><p>OFF DUTY / INPUT SIGNALS</p><h1>下班后的输入</h1><span>追番和游戏是另一组持续采样的数据。</span></header><div className="off-duty-grid"><section><header><p>01 / ANIME ARCHIVE</p><h2>追番记录</h2></header>{anime.map((item, index) => <article className="archive-row" key={item.title}><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.title}</h3><p>{item.genre}</p><p>{item.note}</p></div><b>{item.status}</b></article>)}</section><section><header><p>02 / GAME SAVE FILES</p><h2>游戏存档</h2></header>{games.map((item, index) => <article className="archive-row" key={item.title}><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.title}</h3><p>{item.platform} · {item.progress}</p><p>{item.note}</p></div><b>{item.rating}</b></article>)}</section></div><Link className="back-link" href="/">← 返回主信号</Link></div></section>;
 }

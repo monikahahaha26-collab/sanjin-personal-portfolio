@@ -1,116 +1,65 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRef, type CSSProperties, type PointerEvent } from "react";
-import { PixelWord } from "./PixelWord";
-import { PaintedCube } from "./PaintedCube";
 
-/**
- * HomeHero — 新首页首屏
- * 像素风 SANJIN 点阵标识 + 页面四周彩绘魔方装饰（废弃原 Agent 屏幕方案）。
- * 跳转入口为内容中的按钮（非顶部导航栏），与「模块跳转」交互模式一致。
- */
-
-const CUBE_DECOS = [
-  { palette: "classic" as const, order: 2, size: 64, top: "7%", left: "4%", tilt: -18, floatDelay: "0s", spin: false, opacity: 0.5, depth: -0.55 },
-  { palette: "sunset" as const, order: 3, size: 46, top: "16%", right: "6%", tilt: 22, floatDelay: "0.8s", spin: false, opacity: 0.45, depth: 0.35 },
-  { palette: "galaxy" as const, order: 4, size: 54, top: "48%", left: "2.5%", tilt: 30, floatDelay: "1.6s", spin: false, opacity: 0.4, depth: -0.3 },
-  { palette: "sunset" as const, order: 5, size: 40, top: "58%", right: "3%", tilt: -24, floatDelay: "2.2s", spin: false, opacity: 0.4, depth: 0.5 },
-  { palette: "galaxy" as const, order: 6, size: 62, bottom: "4%", left: "7%", tilt: 14, floatDelay: "0.4s", spin: true, opacity: 0.45, depth: -0.4 },
-  { palette: "classic" as const, order: 7, size: 50, bottom: "6%", right: "8%", tilt: -14, floatDelay: "1.2s", spin: true, opacity: 0.5, depth: 0.3 },
-];
+const channels = [
+  ["AI Applications", "模型、RAG 与可用的产品接口"],
+  ["Embedded Systems", "传感、控制与边缘侧软件"],
+  ["Projects", "从需求到可验证的交付"],
+  ["Off Duty", "追番与游戏，补充输入信号"],
+] as const;
 
 export function HomeHero() {
-  const heroRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [selected, setSelected] = useState(0);
+  const [pointer, setPointer] = useState(0.45);
 
-  const onPointerMove = (event: PointerEvent<HTMLElement>) => {
-    if (
-      event.pointerType === "touch" ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 22;
-    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 18;
-    event.currentTarget.style.setProperty("--pointer-x", `${x}px`);
-    event.currentTarget.style.setProperty("--pointer-y", `${y}px`);
-  };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const draw = () => {
+      const rect = canvas.getBoundingClientRect();
+      const scale = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * scale; canvas.height = rect.height * scale;
+      context.scale(scale, scale);
+      const { width, height } = rect;
+      context.fillStyle = "#171815"; context.fillRect(0, 0, width, height);
+      context.strokeStyle = "rgba(241,238,223,.12)"; context.lineWidth = 1;
+      for (let x = 0; x < width; x += 28) { context.beginPath(); context.moveTo(x, 0); context.lineTo(x, height); context.stroke(); }
+      for (let y = 0; y < height; y += 28) { context.beginPath(); context.moveTo(0, y); context.lineTo(width, y); context.stroke(); }
+      context.strokeStyle = "#9ac66d"; context.lineWidth = 2; context.beginPath();
+      for (let x = 0; x <= width; x += 3) {
+        const phase = x / width * Math.PI * (4 + selected) + pointer * Math.PI * 2;
+        const amplitude = 21 + selected * 6;
+        const y = height * .52 + Math.sin(phase) * amplitude + Math.sin(phase * 3.1) * 7;
+        if (x === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.stroke();
+      const markerX = pointer * width;
+      context.fillStyle = "#e5aa35"; context.fillRect(markerX - 3, 12, 6, height - 24);
+    };
+    draw(); window.addEventListener("resize", draw); return () => window.removeEventListener("resize", draw);
+  }, [pointer, selected]);
 
-  const resetPointer = () => {
-    heroRef.current?.style.setProperty("--pointer-x", "0px");
-    heroRef.current?.style.setProperty("--pointer-y", "0px");
-  };
-
-  return (
-    <section
-      ref={heroRef}
-      className="home-hero"
-      aria-label="站点标识"
-      onPointerMove={onPointerMove}
-      onPointerLeave={resetPointer}
-    >
-      {/* 四周彩绘魔方装饰 */}
-      {CUBE_DECOS.map((d, i) => {
-        const style: CSSProperties = {
-          opacity: d.opacity,
-          ["--depth" as string]: d.depth,
-        };
-        if (d.top !== undefined) style.top = d.top;
-        if (d.bottom !== undefined) style.bottom = d.bottom;
-        if (d.left !== undefined) style.left = d.left;
-        if (d.right !== undefined) style.right = d.right;
-        return (
-          <div
-            key={i}
-            className={`cube-deco${d.left !== undefined ? " cube-deco-l" : ""}`}
-            style={style}
-          >
-            <div
-              className={d.spin ? "cube-float-spin" : "cube-float"}
-              style={{
-                animationDelay: d.floatDelay,
-                ["--tilt" as string]: `${d.tilt}deg`,
-              }}
-            >
-          <PaintedCube palette={d.palette} order={d.order as 2 | 3 | 4 | 5 | 6 | 7} size={d.size} />
-            </div>
-          </div>
-        );
-      })}
-
-      <div className="home-hero-inner">
-        <p className="hero-eyebrow-pixel">
-          <span className="hero-eyebrow-dot" aria-hidden="true" />
-          SANJIN · Personal Portfolio
-        </p>
-
-        <h1 className="sr-only">SANJIN 个人作品集</h1>
-        <PixelWord text="SANJIN" />
-
-        <p className="hero-pixel-title">站点归属 · SANJIN</p>
-
-        <p className="hero-sub">
-          你好，我是 <strong>SANJIN</strong>，一名<strong>应届毕业生</strong>。
-          这里整合了我的 <strong>博客</strong>、<strong>作品项目</strong> 与{" "}
-          <strong>兴趣爱好</strong> 三个模块 —— 点击下方入口，随时切换探索。
-        </p>
-
-        <div className="hero-actions">
-          <Link className="btn btn-primary" href="/projects">
-            浏览项目
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </Link>
-          <Link className="btn btn-outline" href="/blog">
-            阅读博客
-          </Link>
-          <Link className="btn btn-ghost" href="/hobbies">
-            兴趣爱好
-          </Link>
-        </div>
-
-        <p className="hero-hint">SCROLL · 三个模块等你去探索</p>
+  return <section className="signal-hero" aria-label="个人信号监视器">
+    <div className="container signal-layout">
+      <div className="signal-copy">
+        <p className="console-label"><span className="status-light" /> CHANNEL 00 / PERSONAL PORTFOLIO</p>
+        <h1>YOUR<br /><span>SIGNAL</span><br />MATTERS.</h1>
+        <p className="signal-intro">电子信息工程专业，面向 <strong>AI 应用开发</strong> 与 <strong>嵌入式</strong> 岗位。关注一段技术链路如何从输入、处理到稳定输出。</p>
+        <div className="signal-actions"><Link className="console-button primary" href="/projects">查看项目</Link><a className="console-button" href="#contact">联系我</a></div>
       </div>
-    </section>
-  );
+      <div className="monitor-shell">
+        <div className="monitor-header"><span>Signal Monitor / Live Input</span><span>CH-{String(selected + 1).padStart(2, "0")}</span></div>
+        <canvas ref={canvasRef} className="signal-canvas" onPointerMove={(event) => { const rect = event.currentTarget.getBoundingClientRect(); setPointer(Math.max(.04, Math.min(.96, (event.clientX - rect.left) / rect.width))); }} />
+        <div className="channel-list" role="tablist" aria-label="信号频道">
+          {channels.map(([title, description], index) => <button key={title} className={selected === index ? "active" : ""} onClick={() => setSelected(index)} role="tab" aria-selected={selected === index}><span>{String(index + 1).padStart(2, "0")}</span><b>{title}</b><small>{description}</small></button>)}
+        </div>
+      </div>
+    </div>
+  </section>;
 }

@@ -1,78 +1,31 @@
-/* ============================================
-   Personal Data — About Page & Hero
-   替换为你的真实信息
-   ============================================ */
-
 export const personalInfo = {
-  name: "SANJIN",
-  title: "应届毕业生 · Java 后端与 AI 应用方向",
-  tagline: "以企业采购平台与销售分析 Agent 为主线，记录 Java 后端、AI 应用与数据可视化实践。",
-  github: "https://github.com/cuber-sanjin",
+  name: "YOUR NAME",
+  title: "电子信息工程 · AI 应用开发 / 嵌入式方向",
+  tagline: "把传感、数据和模型做成稳定、可验证、能交付的产品。",
+  github: "https://github.com/monikahahaha26-collab",
+  email: "your.email@example.com",
+  location: "城市待补充",
+  school: "学校待补充",
+  graduation: "毕业时间待补充",
   resumeFile: "/SANJIN-Resume.docx",
 };
 
 export const jobPreference = {
-  targetRoles: ["Java 后端开发", "AI 应用开发", "数据分析"],
-  targetCities: ["面议"],
-  availability: "2026 届应届毕业生",
+  targetRoles: ["AI 应用开发", "嵌入式软件工程师"],
+  targetCities: ["城市待补充"],
+  availability: "OPEN TO OPPORTUNITIES",
   workMode: ["全职", "实习"],
 };
 
-export interface Skill {
-  name: string;
-  level: number; // 1-5, 用于显示熟练度条
-}
-
-export interface SkillCategory {
-  category: string;
-  skills: Skill[];
-}
+export interface Skill { name: string; level: number }
+export interface SkillCategory { category: string; skills: Skill[] }
 
 export const skillCategories: SkillCategory[] = [
-  {
-    category: "语言",
-    skills: [
-      { name: "Python", level: 3 },
-      { name: "Java", level: 2 },
-      { name: "HTML / CSS / JavaScript", level: 3 },
-      { name: "SQL", level: 3 },
-    ],
-  },
-  {
-    category: "框架 & 库",
-    skills: [
-      { name: "Flask / Servlet", level: 2 },
-      { name: "React / Next.js", level: 2 },
-      { name: "Pandas / jieba / ECharts", level: 3 },
-    ],
-  },
-  {
-    category: "工具 & 平台",
-    skills: [
-      { name: "Git / GitHub", level: 3 },
-      { name: "MySQL", level: 2 },
-      { name: "AI 辅助开发", level: 3 },
-    ],
-  },
+  { category: "软件与 AI", skills: [{ name: "Python", level: 3 }, { name: "Java / Spring", level: 3 }, { name: "RAG / Agent", level: 3 }, { name: "React / Vue", level: 3 }] },
+  { category: "嵌入式", skills: [{ name: "C / C++", level: 2 }, { name: "MCU 外设", level: 2 }, { name: "串口与网络", level: 2 }, { name: "传感器数据", level: 2 }] },
 ];
 
-export interface Experience {
-  id: string;
-  organization: string;
-  role: string;
-  period: string;
-  description: string;
-  highlights?: string[];
-}
-
+export interface Experience { id: string; organization: string; role: string; period: string; description: string; highlights?: string[] }
 export const experiences: Experience[] = [];
-
-export interface Education {
-  id: string;
-  school: string;
-  degree: string;
-  period: string;
-  description?: string;
-}
-
+export interface Education { id: string; school: string; degree: string; period: string; description?: string }
 export const education: Education[] = [];

@@ -1,144 +1,34 @@
-/* ============================================
-   Design Tokens — Personal Portfolio
-   换肤入口：修改此文件中的变量值即可
-   覆盖范围：颜色 / 字号 / 间距 / 圆角 / 阴影 / 动效
-   不覆盖：布局结构 / 字体层级体系 / 卡片形态 / 插画构图
-   ============================================ */
-
 :root {
-  /* ── Colors: Surface ── */
-  --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #FAFAF9;   /* 暖白，避免纯灰的冷感 */
-  --color-bg-tertiary: #F5F5F4;
-  --color-bg-elevated: #FFFFFF;
-  --color-bg-ink: #16161A;         /* 深色区块（Agent 屏幕、页脚） */
-
-  /* ── Colors: Text ── */
-  --color-text-primary: #16161A;   /* 近黑，比纯黑柔和 */
-  --color-text-secondary: #52525B;
-  --color-text-muted: #A1A1AA;
-  --color-text-inverse: #FFFFFF;
-
-  /* ── Colors: Accent（赤陶橙 — 避开烂大街蓝，呼应魔方橙面） ──
-     对比度：#C2410C on #FFF = 5.9:1 (AA 正文通过)
-             #FFF on #C2410C = 5.9:1 (AA 按钮文字通过) */
-  --color-accent: #C2410C;
-  --color-accent-hover: #9A3412;
-  --color-accent-light: #FFEDD5;
-  --color-accent-subtle: #FFF7ED;
-  --color-accent-ring: rgba(194, 65, 12, 0.28);
-
-  /* ── Colors: Border ── */
-  --color-border: #E7E5E4;
-  --color-border-strong: #D6D3D1;
-  --color-border-hover: #C2410C;
-
-  /* ── Colors: Semantic ── */
-  --color-success: #15803D;
-  --color-warning: #B45309;
-  --color-error: #B91C1C;
-
-  /* ── Colors: Cube（魔方六色 — 用作装饰点缀与兴趣板块标识） ── */
-  --cube-white: #F8FAFC;
-  --cube-yellow: #FACC15;
-  --cube-red: #DC2626;
-  --cube-orange: #EA580C;
-  --cube-blue: #2563EB;
-  --cube-green: #16A34A;
-
-  /* ── Typography ── */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "HarmonyOS Sans SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Source Han Sans SC", sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas,
-    ui-monospace, monospace;
-
-  --text-xs: 0.75rem;     /* 12px */
-  --text-sm: 0.875rem;    /* 14px */
-  --text-base: 1rem;      /* 16px */
-  --text-lg: 1.125rem;    /* 18px */
-  --text-xl: 1.25rem;     /* 20px */
-  --text-2xl: 1.5rem;     /* 24px */
-  --text-3xl: 1.875rem;   /* 30px */
-  --text-4xl: 2.25rem;    /* 36px */
-  --text-5xl: 3rem;       /* 48px */
-  --text-6xl: 3.75rem;    /* 60px */
-
-  --leading-tight: 1.15;
-  --leading-snug: 1.35;
-  --leading-normal: 1.6;
-  --leading-relaxed: 1.8;
-
-  /* 字距：大标题收紧，小字放松 */
-  --tracking-tighter: -0.035em;
-  --tracking-tight: -0.02em;
-  --tracking-normal: 0;
-  --tracking-wide: 0.02em;
-  --tracking-widest: 0.14em;
-
-  /* ── Spacing ── */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
-  --space-32: 8rem;
-
-  /* ── Border Radius ── */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
-  --radius-full: 9999px;
-
-  /* ── Shadows（暖色阴影，与暖白背景协调） ── */
-  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.05);
-  --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.07), 0 1px 2px rgba(28, 25, 23, 0.04);
-  --shadow-md: 0 4px 10px rgba(28, 25, 23, 0.07), 0 2px 4px rgba(28, 25, 23, 0.04);
-  --shadow-lg: 0 12px 24px rgba(28, 25, 23, 0.09), 0 4px 8px rgba(28, 25, 23, 0.04);
-  --shadow-xl: 0 24px 48px rgba(28, 25, 23, 0.12), 0 8px 16px rgba(28, 25, 23, 0.05);
-  --shadow-screen: 0 32px 64px -12px rgba(28, 25, 23, 0.28),
-    0 12px 24px -8px rgba(28, 25, 23, 0.14);
-
-  /* ── Animation ── */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-spring: linear(0, 0.32, 0.74, 0.95, 1.03, 1.01, 1);
-
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --duration-slow: 400ms;
-  --duration-slower: 600ms;
-
-  /* ── Layout ── */
-  --container-max: 1200px;
-  --container-narrow: 760px;
-  --header-height: 64px;
+  --color-bg-primary: #20211f;
+  --color-bg-secondary: #2b2c29;
+  --color-bg-tertiary: #34352f;
+  --color-bg-elevated: #f1eedf;
+  --color-bg-ink: #171815;
+  --color-text-primary: #f1eedf;
+  --color-text-secondary: #c5c4b9;
+  --color-text-muted: #92948a;
+  --color-text-inverse: #1d1e1b;
+  --color-accent: #e5aa35;
+  --color-accent-hover: #ffd46e;
+  --color-accent-light: #4b3a1c;
+  --color-accent-subtle: #302a1c;
+  --color-accent-ring: rgba(229, 170, 53, .38);
+  --color-border: #52534b;
+  --color-border-strong: #74756b;
+  --color-border-hover: #e5aa35;
+  --color-success: #9ac66d;
+  --color-warning: #e5aa35;
+  --color-error: #e46756;
+  --font-sans: "Arial", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; --text-2xl: 1.5rem; --text-3xl: 1.875rem; --text-4xl: 2.25rem; --text-5xl: 3rem; --text-6xl: 3.75rem;
+  --leading-tight: 1.15; --leading-snug: 1.35; --leading-normal: 1.6; --leading-relaxed: 1.8;
+  --tracking-tighter: 0; --tracking-tight: 0; --tracking-normal: 0; --tracking-wide: .04em; --tracking-widest: .12em;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem; --space-32: 8rem;
+  --radius-sm: 2px; --radius-md: 4px; --radius-lg: 6px; --radius-xl: 8px; --radius-2xl: 8px; --radius-full: 999px;
+  --shadow-xs: none; --shadow-sm: none; --shadow-md: none; --shadow-lg: none; --shadow-xl: none; --shadow-screen: 8px 8px 0 #11120f;
+  --ease-out: ease-out; --ease-in-out: ease-in-out; --ease-spring: ease-out;
+  --duration-fast: 150ms; --duration-normal: 250ms; --duration-slow: 400ms; --duration-slower: 600ms;
+  --container-max: 1180px; --container-narrow: 760px; --header-height: 64px;
 }
-
-/* ── Reduced Motion ── */
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --duration-fast: 0ms;
-    --duration-normal: 0ms;
-    --duration-slow: 0ms;
-    --duration-slower: 0ms;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

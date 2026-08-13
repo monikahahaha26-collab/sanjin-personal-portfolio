@@ -1,0 +1,22 @@
+name: Sync public GitHub repositories
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Fetch public repositories
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --paginate "/users/monikahahaha26-collab/repos?per_page=100&type=public&sort=updated" --jq '[.[] | {name, description, html_url, language, topics, updated_at, homepage}]' > data/github-repos.json
+      - name: Commit cache when changed
+        run: |
+          git diff --quiet data/github-repos.json || (git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add data/github-repos.json && git commit -m "chore: sync public repositories" && git push)

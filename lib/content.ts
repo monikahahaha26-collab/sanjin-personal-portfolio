@@ -1,95 +1,53 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import repoCache from "@/data/github-repos.json";
+import { portfolioConfig, projectOverrides, type ProjectCategory } from "@/data/project-overrides";
 
 const contentDir = path.join(process.cwd(), "content/projects");
 const extRegex = new RegExp("\\.(mdx|md)$");
 
 export interface ProjectFrontmatter {
-  title: string;
-  summary: string;
-  cover: string;
-  date: string;
-  tags: string[];
-  role: string;
-  period: string;
-  features: string[];
-  challenges: string[];
-  links: {
-    demo?: string | null;
-    repo?: string | null;
-  };
-  /** 展示优先级（越小越靠前）。缺省时按 date 倒序。 */
-  priority?: number;
-  /** 是否仅为演示 Demo（不参与主推排序） */
-  demo?: boolean;
-  /** 多图轮切：补充截图路径数组（相对 public/ 或绝对 /projects/…） */
-  screenshots?: string[];
+  title: string; summary: string; cover?: string; date: string; tags: string[]; role: string; period: string;
+  features: string[]; challenges: string[]; links: { demo?: string | null; repo?: string | null }; priority?: number; demo?: boolean; screenshots?: string[];
 }
-
-export interface Project {
-  slug: string;
-  frontmatter: ProjectFrontmatter;
-  content: string;
+export interface Project { slug: string; frontmatter: ProjectFrontmatter; content: string }
+export interface PortfolioProject extends Project {
+  repoName: string; githubUrl: string; language?: string | null; topics: string[]; updatedAt: string; category: ProjectCategory; featured?: number; homepage?: string;
 }
+type CachedRepo = { name: string; description?: string | null; html_url: string; language?: string | null; topics?: string[]; updated_at: string; homepage?: string | null };
 
-export function getAllProjects(): Project[] {
+function readMdxProjects(): Project[] {
   if (!fs.existsSync(contentDir)) return [];
+  return fs.readdirSync(contentDir).filter((file) => extRegex.test(file)).map((filename) => {
+    const { data, content } = matter(fs.readFileSync(path.join(contentDir, filename), "utf-8"));
+    return { slug: filename.replace(extRegex, ""), frontmatter: data as ProjectFrontmatter, content };
+  });
+}
 
-  const files = fs
-    .readdirSync(contentDir)
-    .filter((f) => f.endsWith(".mdx") || f.endsWith(".md"));
+function categoryFromRepo(repo: CachedRepo): ProjectCategory {
+  const signal = `${repo.name} ${repo.description ?? ""} ${(repo.topics ?? []).join(" ")}`.toLowerCase();
+  if (/ai|agent|rag|gout/.test(signal)) return "AI 应用";
+  if (/data|analytics|sentiment/.test(signal)) return "数据";
+  if (/game|ember|archive/.test(signal)) return "创意";
+  return "全栈";
+}
 
-  const projects = files.map((filename) => {
-    const slug = filename.replace(extRegex, "");
-    const filePath = path.join(contentDir, filename);
-    const fileContent = fs.readFileSync(filePath, "utf-8");
-    const { data, content } = matter(fileContent);
-
-    return {
-      slug,
-      frontmatter: data as unknown as ProjectFrontmatter,
-      content,
+export function getAllProjects(): PortfolioProject[] {
+  const mdx = readMdxProjects();
+  const bySlug = new Map(mdx.map((item) => [item.slug, item]));
+  const caches = repoCache as CachedRepo[];
+  const repos = caches.filter((repo) => !portfolioConfig.excludedRepos.includes(repo.name));
+  return repos.map((repo) => {
+    const override = projectOverrides[repo.name];
+    const enhanced = override?.mdxSlug ? bySlug.get(override.mdxSlug) : undefined;
+    const fallback: ProjectFrontmatter = {
+      title: repo.name, summary: repo.description || "暂无仓库描述。", cover: undefined, date: repo.updated_at.slice(0, 7), tags: [repo.language, ...(repo.topics ?? [])].filter(Boolean) as string[], role: "独立开发", period: repo.updated_at.slice(0, 7), features: [], challenges: [], links: { repo: repo.html_url, demo: repo.homepage || undefined },
     };
-  });
-
-  // 排序：优先按 priority 升序；无 priority 的按 date 倒序（最新在前）；demo 项目始终靠后
-  return projects.sort((a, b) => {
-    const pa = a.frontmatter.priority;
-    const pb = b.frontmatter.priority;
-    const da = a.frontmatter.demo ? 1 : 0;
-    const db = b.frontmatter.demo ? 1 : 0;
-    if (da !== db) return da - db; // 非 demo 优先
-    if (pa !== undefined && pb !== undefined) return pa - pb;
-    if (pa !== undefined) return -1;
-    if (pb !== undefined) return 1;
-    return (b.frontmatter.date || "").localeCompare(a.frontmatter.date || "");
-  });
+    return { slug: override?.mdxSlug ?? repo.name, frontmatter: enhanced?.frontmatter ?? fallback, content: enhanced?.content ?? "", repoName: repo.name, githubUrl: repo.html_url, language: repo.language, topics: repo.topics ?? [], updatedAt: repo.updated_at, category: override?.category ?? categoryFromRepo(repo), featured: override?.featured, homepage: override?.demo ?? repo.homepage ?? undefined };
+  }).sort((a, b) => (a.featured ?? 999) - (b.featured ?? 999) || b.updatedAt.localeCompare(a.updatedAt));
 }
 
-export function getProjectBySlug(slug: string): Project | undefined {
-  const filePath = path.join(contentDir, `${slug}.mdx`);
-  if (!fs.existsSync(filePath)) {
-    // Try .md extension
-    const mdPath = path.join(contentDir, `${slug}.md`);
-    if (!fs.existsSync(mdPath)) return undefined;
-  }
-
-  const actualPath = fs.existsSync(filePath) ? filePath : path.join(contentDir, `${slug}.md`);
-  const fileContent = fs.readFileSync(actualPath, "utf-8");
-  const { data, content } = matter(fileContent);
-
-  return {
-    slug,
-    frontmatter: data as unknown as ProjectFrontmatter,
-    content,
-  };
-}
-
-export function getAllProjectSlugs(): string[] {
-  if (!fs.existsSync(contentDir)) return [];
-  return fs
-    .readdirSync(contentDir)
-    .filter((f) => f.endsWith(".mdx") || f.endsWith(".md"))
-    .map((f) => f.replace(extRegex, ""));
-}
+export function getFeaturedProjects() { return getAllProjects().filter((project) => project.featured).slice(0, 4); }
+export function getProjectBySlug(slug: string) { return getAllProjects().find((project) => project.slug === slug || project.repoName === slug); }
+export function getAllProjectSlugs() { return getAllProjects().map((project) => project.slug); }

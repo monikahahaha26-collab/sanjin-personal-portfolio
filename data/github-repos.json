@@ -1,0 +1,7 @@
+[
+  { "name": "AegisGift", "description": "企业礼赠采购与 AI 辅助选品平台", "html_url": "https://github.com/monikahahaha26-collab/AegisGift", "language": "Java", "topics": ["spring-boot", "spring-ai", "vue"], "updated_at": "2026-08-01T00:00:00Z", "homepage": "" },
+  { "name": "ember-spire", "description": "Roguelike 卡牌游戏与离线存档体验", "html_url": "https://github.com/monikahahaha26-collab/ember-spire", "language": "TypeScript", "topics": ["canvas", "vite", "cloudflare"], "updated_at": "2026-07-21T00:00:00Z", "homepage": "https://ember-spire.pages.dev" },
+  { "name": "gout-diet-guide", "description": "面向痛风人群的饮食管理微信小程序", "html_url": "https://github.com/monikahahaha26-collab/gout-diet-guide", "language": "JavaScript", "topics": ["miniprogram", "ai", "cloudbase"], "updated_at": "2026-07-18T00:00:00Z", "homepage": "" },
+  { "name": "sanjin-personal-portfolio", "description": "个人作品集，使用 Next.js 静态导出与 GitHub Pages 部署", "html_url": "https://github.com/monikahahaha26-collab/sanjin-personal-portfolio", "language": "TypeScript", "topics": ["nextjs", "portfolio", "github-pages"], "updated_at": "2026-08-12T00:00:00Z", "homepage": "" },
+  { "name": "seventeen-carat-archive", "description": "本地优先的成员档案与媒体收藏站", "html_url": "https://github.com/monikahahaha26-collab/seventeen-carat-archive", "language": "TypeScript", "topics": ["react", "indexeddb", "vite"], "updated_at": "2026-07-12T00:00:00Z", "homepage": "https://seventeen-carat-archive.pages.dev" }
+]
