@@ -31,6 +31,9 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
 
       - uses: actions/configure-pages@v5
+        with:
+          # First deployment: create and configure the Pages site for Actions.
+          enablement: true
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ./out
