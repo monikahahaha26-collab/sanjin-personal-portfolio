@@ -1,0 +1,66 @@
+---
+title: "记账 | Mobile Ledger"
+summary: "移动优先的记账 PWA 应用。支持语音/手动记账、分类统计、数据同步，可打包为 Android APK（Capacitor），电脑端提供监控后台。"
+cover: "/projects/ledger-app-new.png"
+date: "2025-05"
+screenshots:
+  - "/projects/ledger-records-new.png"
+  - "/projects/ledger-admin-new.png"
+priority: 8
+tags: ["HTML/CSS/JavaScript", "Node.js", "Express", "Service Worker", "Capacitor", "PWA"]
+role: "独立开发"
+period: "2025.05 – 2025.05"
+features:
+  - "移动优先设计：大按钮、语音输入、单手操作友好"
+  - "双端同步：手机记录（PWA/APK）+ 电脑查看与监控"
+  - "分类统计：按支出类别聚合，可视化趋势"
+  - "离线可用：Service Worker 缓存 + 本地存储兜底"
+  - "Android 打包：通过 Capacitor 构建原生 APK"
+challenges:
+  - "PWA 安装体验：manifest 配置 + splash screen 适配"
+  - "跨端数据同步：API Token 认证 + 冲突解决策略"
+  - "语音输入集成：Web Speech API 的兼容性降级处理"
+links:
+  demo: null
+  repo: null
+---
+
+## 项目概述
+
+Mobile Ledger 是一款轻量级个人记账工具。核心场景是"随手记一笔"——走在路上、吃饭时掏出手机快速记一笔开支。电脑端则提供更完整的统计视图和数据管理能力。
+
+## 技术架构
+
+```
+┌──────────────────────┐
+│   前端 (www/)        │
+│  PWA + Service Worker│
+│  移动优先响应式 UI    │
+└──────────┬───────────┘
+           │ REST API
+┌──────────▼───────────┐
+│   Node.js 后端         │
+│  Express + JSON 存储   │
+│  /api/records 等接口   │
+└──────┬───────────────┘
+       │ 可选: 同步
+┌──────▼───────────────┐
+│  Android (Capacitor)  │
+│  ledger.apk 原生包     │
+└──────────────────────┘
+```
+
+## 核心功能
+
+### 记账入口
+
+- **手动输入**：金额 + 分类 + 备注，一键提交
+- **语音输入**："花了三十块买午饭" → 自动解析金额和分类
+- **快捷操作**：常用分类一键记（无需输入金额）
+
+### 数据面板
+
+- 总收入 / 总支出 / 结余概览卡
+- 按分类的支出去向统计
+- 明细查询（支持日期筛选）
+- 同步状态指示器

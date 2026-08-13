@@ -1,0 +1,71 @@
+---
+title: "微博公共事件情感倾向分析系统"
+summary: "毕业设计：面向微博公共事件评论的情感倾向分析系统，完成数据清洗、中文分词、情感分类、LDA 主题分析与 ECharts 可视化展示。"
+cover: "/projects/weibo-sentiment.png"
+date: "2025-06"
+screenshots:
+  - "/projects/weibo-sentiment-2.png"
+  - "/projects/weibo-sentiment-3.png"
+  - "/projects/weibo-sentiment-4.png"
+  - "/projects/weibo-sentiment-5.png"
+  - "/projects/weibo-sentiment-6.png"
+  - "/projects/weibo-sentiment-7.png"
+  - "/projects/weibo-sentiment-8.png"
+priority: 3
+tags: ["Python", "Flask", "Jieba 分词", "LDA/BERT", "MySQL", "ECharts", "词云"]
+role: "独立开发"
+period: "2025.05 – 2025.06"
+features:
+  - "评论数据清洗与 jieba 中文分词，形成可分析的文本数据集"
+  - "基于 BERT 思路进行正面、负面、中性情感分类，并输出分类结果"
+  - "使用 LDA 提取讨论主题，结合关键词和词云辅助观察"
+  - "使用 ECharts 展示评论量、情感占比和趋势等分析结果"
+challenges:
+  - "统一清洗、分词和模型输入格式，降低中文文本噪声影响"
+  - "协调 Flask 接口、MySQL 数据表与前端图表的数据结构"
+  - "在本地演示环境中使用脱敏样例数据，避免展示原始评论内容"
+links:
+  demo: null
+  repo: null
+---
+
+## 项目概述
+
+这是一个面向公共事件舆情研究的毕业设计。系统围绕评论文本完成情感倾向判定、主题提取与可视化展示，用于观察公众对热点事件的情绪变化与关注主题。
+
+## 系统架构
+
+```
+┌─────────────────────────────────────┐
+│          Flask Web 应用              │
+│  ┌──────┐ ┌──────┐ ┌──────────┐   │
+│  │爬虫模块│ │NLP引擎│ │ 可视化层  │   │
+│  │spider│ │analysis│ │ ECharts  │   │
+│  └──┬───┘ └──┬───┘ └──────────┘   │
+│     │         │                      │
+│  ┌──▼─────────▼──────────────────┐  │
+│  │       MySQL 数据库             │  │
+│  │  (原始文本 / 情感标签 / 主题)   │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+```
+
+## 核心模块
+
+### 数据采集 (spider/)
+
+- 定向抓取微博超话/话题下的文章与评论
+- 数据清洗：去重、去广告、HTML 标签剥离
+- 结构化存储至 MySQL
+
+### 情感分析 (model/)
+
+- **规则方法**：基于情感词典（大连理工情感词汇库扩展）打分
+- **模型方法**：BERT 微调分类器（正/负/中性三分类）
+- 双重结果对比，可配置权重融合
+
+### 主题分析 (wordcloud/)
+
+- LDA 主题模型提取潜在话题分布
+- TF-IDF 热词排名
+- 词云生成（自定义形状蒙版）

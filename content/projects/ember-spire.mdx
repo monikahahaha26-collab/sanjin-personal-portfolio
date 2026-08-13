@@ -1,0 +1,62 @@
+---
+title: "余烬尖塔 | Ember Spire"
+summary: "杀戮尖塔风格的 Roguelike 网页卡牌游戏。三角色、双幕章、姿态系统，支持本地存档与 Cloudflare D1 云端存档，纯前端可离线运行。"
+cover: "/projects/ember-spire-new.png"
+date: "2025-07"
+screenshots:
+  - "/projects/ember-map-new.png"
+  - "/projects/ember-combat-new.png"
+priority: 6
+tags: ["TypeScript", "Vite", "HTML5 Canvas", "Cloudflare Workers", "D1", "Wrangler"]
+role: "独立开发"
+period: "2025.06 – 2025.07"
+features:
+  - "三角色（铁卫/夜刃/星灵），各有独特技能树与初始牌组"
+  - "姿态系统：每回合切换攻/防姿态，影响抽牌与受击策略"
+  - "双幕章推进：P2 阶段解锁新机制与精英敌人"
+  - "本地 localStorage 优先 + D1 云端存档兜底，离线可玩"
+  - "等距投影视觉风格，CSS 动画驱动卡牌交互"
+challenges:
+  - "Canvas 渲染性能优化：分层渲染 + 脏矩形检测，保持 60fps"
+  - "D1 边缘情况处理：并发写入冲突与数据迁移兼容"
+  - "移动端触控适配：拖拽出牌与手势操作的统一事件层"
+links:
+  demo: "https://ember-spire.pages.dev"
+  repo: "https://github.com/cuber-sanjin/ember-spire"
+---
+
+## 项目概述
+
+《余烬尖塔》是一款受《杀戮尖塔》（Slay the Spire）启发的浏览器 Roguelike 卡牌游戏。玩家选择角色、构建牌组、逐层攀登尖塔，在随机生成的战斗中做出战术决策。
+
+## 技术架构
+
+```
+┌─────────────────────────────────┐
+│     Vite + TypeScript 前端      │
+│   (Canvas 渲染 / 状态管理)     │
+└──────────┬──────────────────────┘
+           │ REST API (fetch)
+┌──────────▼──────────────────────┐
+│   Cloudflare Worker (API)       │
+│   ┌─────────────────────────┐   │
+│   │ D1 数据库 (存档)        │   │
+│   └─────────────────────────┘   │
+└─────────────────────────────────┘
+```
+
+## 核心实现
+
+### 卡牌引擎
+
+- **牌组构建**：每角色初始 10 张基础牌，通过战斗奖励和商店购买扩展
+- **战斗系统**：每回合抽手牌 → 消耗能量打出 → 敌人行动 → 结算效果
+- **姿态切换**：攻击姿态（伤害+20%，受伤+10%）/ 防御姿态（格挡+30%，伤害-15%）
+
+### 存档方案
+
+优先使用 `localStorage` 存储进度（零延迟），用户登录后可选同步至 Cloudflare D1。Worker API 提供存档的 CRUD 与冲突合并。
+
+## 部署
+
+前端通过 `vite build` 构建为静态资源部署到 Cloudflare Pages；Worker + D1 通过 `wrangler deploy` 一键发布。

@@ -1,0 +1,67 @@
+---
+title: "SEVENTEEN CARAT ARCHIVE | 十七档案站"
+summary: "面向 CARAT（克拉）的 SEVENTEEN 成员档案与图库网站。纯前端本地图库方案：图片与视频仅保存在浏览器 IndexedDB 中，无需服务器与登录即可使用。"
+cover: "/projects/seventeen-carat-archive-new.png"
+date: "2025-07"
+screenshots:
+  - "/projects/seventeen-members-new.png"
+  - "/projects/seventeen-hoshi-new.png"
+priority: 7
+tags: ["React", "TypeScript", "Vite", "IndexedDB", "lucide-react", "Cloudflare Pages"]
+role: "独立开发"
+period: "2025.07 – 2025.07"
+features:
+  - "13 位成员档案页：头像、生日、队内定位、代表色"
+  - "本地图库：拖拽上传图片/视频，IndexedDB 持久化存储"
+  - "JSON 备份导出 / 导入：换设备或清缓存后可恢复"
+  - "暗色/亮色主题切换，响应式布局适配移动端"
+  - "零服务器依赖：可直接部署到任意静态托管平台"
+challenges:
+  - "IndexedDB 大文件存储：分块写入 + 读取流，避免主线程阻塞"
+  - "图片预览性能：缩略图生成 + 虚拟滚动，千张图不卡顿"
+  - "数据迁移兼容：多版本备份格式向前兼容"
+links:
+  demo: "https://seventeen-carat-archive.pages.dev"
+  repo: "https://github.com/cuber-sanjin/seventeen-carat-archive"
+---
+
+## 项目概述
+
+SEVENTEEN CARAT ARCHIVE 是一个粉丝向的 K-pop 团体成员档案与个人图库管理系统。核心设计理念是**隐私优先**——所有上传内容仅存储在用户自己的浏览器中，其他人访问同一网站看不到你的数据。
+
+## 技术架构
+
+```
+┌──────────────────────────────────────┐
+│        React + Vite SPA              │
+│  ┌──────────┐ ┌───────────────────┐ │
+│  │ 成员档案   │ │ 图库 (IndexedDB)  │ │
+│  └──────────┘ └───────────────────┘ │
+│  ┌─────────────────────────────────┐ │
+│  │ 备份/恢复 (JSON 导入导出)       │ │
+│  └─────────────────────────────────┘ │
+└──────────────────────────────────────┘
+       ↓ 静态部署 (无需服务端)
+ Cloudflare Pages / Vercel / GitHub Pages
+```
+
+## 核心功能
+
+### 成员档案系统
+
+- 13 位成员独立页面，包含基本信息、代表色标签
+- 首页支持设置"主推成员"，自定义入口展示
+- 成员头像与封面图支持本地上传
+
+### 本地图库
+
+- 拖拽或点击上传图片/视频文件
+- 自动生成缩略图（Canvas 压缩），原图存 IndexedDB
+- 支持按成员筛选、时间排序
+- 图片点击全屏预览，键盘左右切换
+
+### 数据安全
+
+- 所有数据通过 IndexedDB 存储在浏览器沙箱中
+- 网站本身不收集任何用户数据
+- 提供 JSON 格式的一键备份/恢复

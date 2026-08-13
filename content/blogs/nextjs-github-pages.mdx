@@ -1,0 +1,59 @@
+---
+title: "Next.js 静态导出部署 GitHub Pages 的实践记录"
+date: "2026-06"
+excerpt: "从本地到线上：静态导出、basePath 适配、资源路径前缀、CI 自动部署，一条龙踩坑与解法。"
+tags: ["Next.js", "GitHub Pages", "部署"]
+---
+
+把 Next.js 站点部署到 GitHub Pages，最省心的方式是 **静态导出（`output: "export"`）**。这篇记录几个容易踩坑的点。
+
+## 1. 开启静态导出
+
+```js
+// next.config.ts
+const nextConfig = {
+  output: "export",
+  trailingSlash: true,
+  images: { unoptimized: true },
+};
+```
+
+要点：静态导出下不能用服务端能力（API 路由、服务端渲染请求等），页面必须是**构建期可确定的**。像本项目读取本地 MDX 内容，天然满足。
+
+## 2. basePath：子路径部署的关键
+
+GitHub Pages 的项目页通常挂在 `https://用户名.github.io/仓库名/` 下，此时所有资源与链接都要带仓库名前缀。做法是注入环境变量：
+
+```js
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+```
+
+本地构建时为空（跑在根路径），CI 构建时注入 `/仓库名`。**注意**：`NEXT_PUBLIC_` 前缀的变量会打进客户端代码，图片地址、跳转链接等需要手动拼上前缀的地方，统一用同一个常量处理：
+
+```tsx
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const url = `${BASE}/projects/xxx.png`;
+```
+
+## 3. CI 自动部署
+
+一个精简的 GitHub Actions 工作流即可：检出 → 安装依赖 → 构建（注入 basePath）→ 部署到 Pages。
+
+```yaml
+- name: Build
+  run: npm ci && NEXT_PUBLIC_BASE_PATH=/${{ github.event.repository.name }} npm run build
+- name: Upload Pages artifact
+  uses: actions/upload-pages-artifact@v3
+  with:
+    path: ./out
+```
+
+## 4. 常见坑
+
+- **图片失效**：`<img>` 用相对路径或没拼 basePath → 页面 404 但资源 404。排查时先看网络面板的请求 URL。
+- **404 页**：`trailingSlash` 不一致会导致路由匹配异常，建议开启并保持链接写法统一。
+- **`.nojekyll`**：在 `public/` 放一个空的 `.nojekyll` 文件，避免 GitHub 的 Jekyll 干扰。
+
+## 小结
+
+> 静态导出的边界，换来的是零服务器成本与极快的首屏速度。只要在构建期把"路径前缀"这一个变量想清楚，GitHub Pages 托管个人站点非常顺手。

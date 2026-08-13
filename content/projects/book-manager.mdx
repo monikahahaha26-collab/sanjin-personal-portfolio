@@ -1,0 +1,39 @@
+---
+title: "图书借阅管理系统"
+summary: "Java Web 课程设计。基于 Servlet、JDBC 与 MySQL 实现管理员和读者两类角色的图书、读者与借还记录管理。"
+cover: "/projects/book-manager-login-new.png"
+date: "2025-05"
+screenshots:
+  - "/projects/book-manager-admin-new.png"
+  - "/projects/book-manager-list-new.png"
+priority: 5
+tags: ["Java", "Servlet", "JDBC", "MySQL", "Maven", "Tomcat", "Bootstrap"]
+role: "课程设计 · 功能梳理与运行验证"
+period: "课程设计"
+features:
+  - "管理员端提供图书、读者信息维护与借还记录查询入口"
+  - "读者端提供图书查询、借阅、个人信息与借阅历史页面"
+  - "采用 Servlet、Service、DAO、POJO 分层组织业务与数据访问"
+  - "使用 MySQL 与 c3p0 连接池完成基础 CRUD 数据交互"
+challenges:
+  - "项目使用 Java 8、Servlet 3.1 与 Tomcat 7 Maven 插件，属于课程设计技术栈"
+  - "依赖本地 MySQL bookmanagersystem 数据库；作品集展示源码自带的登录页、后台框架和图书列表界面，不公开数据或部署链接"
+  - "梳理旧项目的路由、DAO 与页面请求关系，作为 Java Web 基础学习记录"
+links:
+  demo: null
+  repo: null
+---
+
+## 项目说明
+
+该项目为 Java Web 课程设计，保留原始源码而未做技术栈改造。系统通过 Servlet 接收请求，Service 协调业务，DAO 使用 JDBC 访问 MySQL；前端使用 Bootstrap 和 jQuery 完成基础表单与列表展示。
+
+## 可验证功能
+
+- 管理员：图书信息、读者信息、借还记录、密码修改
+- 读者：图书查询、借阅操作、个人信息、借阅历史
+- 数据层：图书、读者、借阅记录等实体及对应 DAO
+
+## 说明
+
+该项目的价值在于 Java Web 基础分层、CRUD 和部署流程学习。由于运行需要匹配的本地数据库账号，网站仅展示源码自带页面的本地运行截图，不提供在线账号或源码下载。

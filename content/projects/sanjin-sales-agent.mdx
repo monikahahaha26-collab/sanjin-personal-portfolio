@@ -1,0 +1,56 @@
+---
+title: "叁金销售数据分析 Agent"
+summary: "面向销售总监、大区经理与销售代表的自然语言分析工作台：把订单、产品、区域和人员数据接入 LangChain4j Agent，通过流式对话生成排名、趋势、异常与 ECharts 图表。"
+cover: "/projects/sales-agent-trend.webp"
+date: "2026-08"
+screenshots:
+  - "/projects/sales-agent-top5.webp"
+  - "/projects/sales-agent-anomaly-stream.webp"
+  - "/projects/sales-agent-anomaly-result.webp"
+  - "/projects/sales-agent-profit-query.webp"
+  - "/projects/sales-agent-login.webp"
+priority: 2
+tags: ["Java 21", "Spring Boot 3.5", "LangChain4j", "Vue 3", "Pinia", "SSE", "MySQL", "Redis", "ECharts"]
+role: "独立开发 · 全栈实现与交互验证"
+period: "2026.07 – 2026.08"
+features:
+  - "销售代表 ID 登录并按销售代表、大区经理、销售总监角色控制可查询的数据范围"
+  - "自然语言查询订单明细、销售汇总、销售员/大区/产品排名，支持同比、环比和近 N 个月趋势"
+  - "异常检测识别区域断崖、销售员掉量和 SKU 长时间无销售等经营信号"
+  - "后端以 LangChain4j @Tool 暴露专用查询工具，模型负责意图理解和工具编排，业务计算仍由服务层完成"
+  - "Spring WebFlux SSE 按 token 流式返回回答；前端解析 CHART_JSON 标记并用 ECharts 渲染折线图等结果"
+  - "会话消息写入 MySQL，前端 Pinia + localStorage 保留工作记录，Redis 缓存重复查询"
+challenges:
+  - "把排名、趋势、汇总、原始订单和异常检测拆成互斥工具，避免 Agent 用错查询能力"
+  - "流式传输与图表 JSON 同时到达时，前端使用行缓冲和增量解析，保证文字与图表不会互相污染"
+  - "权限上下文在服务层二次收敛：普通销售代表只能查询自己的订单，管理角色才可查看全局数据"
+  - "演示数据来自项目自带脱敏 SQL，作品集仅展示界面与业务流程，不上传后端或前端源码"
+links:
+  demo: null
+  repo: null
+---
+
+## 项目说明
+
+叁金销售数据分析 Agent 把“问数据”变成销售团队熟悉的对话入口。用户可以直接询问“本季度哪个大区增长最快？”或“最近有没有销售异常？”，Agent 根据意图选择专用工具，再将结果组织成可读结论和图表。
+
+## 技术架构
+
+```text
+Vue 3 + Vite + Vue Router + Pinia + Element Plus
+  ├─ Axios：登录、普通对话和会话清理
+  ├─ fetch + SSE：消费 /agent/chat/stream 的增量 token
+  └─ ECharts / vue-echarts：趋势、排名等图表
+                         │ REST / SSE
+Spring Boot 3.5 + Java 21
+  ├─ LangChain4j：SalesAgent、@Tool 工具编排
+  ├─ Spring Web / WebFlux：同步与流式接口
+  ├─ Spring Data JPA：订单、产品、区域、销售员实体
+  ├─ MySQL：业务数据与对话记忆
+  ├─ Redis：销售查询缓存
+  └─ Sa-Token + Validation + Actuator：权限、参数校验与健康检查
+```
+
+## 展示范围
+
+作品集展示趋势图、Top 5 销售员、异常检测、利润查询和登录页等 6 张真实运行截图。项目源码仍保留在本地路径，未复制进个人作品集仓库。

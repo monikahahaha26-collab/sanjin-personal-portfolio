@@ -1,0 +1,57 @@
+---
+title: "AegisGift 企业礼赠采购平台"
+summary: "面向企业客户的礼赠采购与运营平台：覆盖礼品/礼盒目录、供应商、库存、采购审批、履约、报表，并用规则引擎与 Spring AI 辅助智能选品和知识问答。"
+cover: "/projects/aegisgift-login.webp"
+date: "2026-08"
+screenshots:
+  - "/projects/aegisgift-gifts.webp"
+  - "/projects/aegisgift-bundles.webp"
+  - "/projects/aegisgift-categories.webp"
+  - "/projects/aegisgift-suppliers.webp"
+  - "/projects/aegisgift-inventory.webp"
+  - "/projects/aegisgift-orders.webp"
+  - "/projects/aegisgift-approvals.webp"
+  - "/projects/aegisgift-recommendation-new.webp"
+  - "/projects/aegisgift-knowledge-rag.webp"
+  - "/projects/aegisgift-after-sales-rag.webp"
+priority: 1
+tags: ["Java 21", "Spring Boot 3.5", "MyBatis", "MySQL", "Redis", "Spring AI", "pgvector", "Vue 3", "Element Plus"]
+role: "独立开发 · 后端架构与后台验证"
+period: "2026.07 – 2026.08"
+features:
+  - "企业礼赠采购闭环：企业登录、礼品/礼盒浏览、购物车、下单、审批、支付回调、发货与签收"
+  - "运营后台覆盖礼品、礼盒、分类、供应商、企业客户、运营人员、采购订单与报表管理"
+  - "库存中心区分总库存、锁定库存和可用库存，记录入库、锁定、扣减、释放等流水并提供预警线"
+  - "智能选品先按预算、人数、起订量、在售状态和实时库存做硬约束筛选，再由 Spring AI 解释和排序"
+  - "采购知识文档写入 pgvector，知识问答只引用检索片段，明确不修改订单、库存或支付状态"
+challenges:
+  - "采用 common / domain / server 三模块 Maven 单体分层，统一 DTO、异常、鉴权与业务服务边界"
+  - "库存锁定、审批超时和支付回调需要幂等处理；Redis 用于缓存和并发场景下的状态协调"
+  - "Spring AI 和向量库均为可选增强层；模型不可用时保留本地规则结果，降低外部服务故障影响"
+  - "后台截图来自本地脱敏数据，未暴露数据库账号、密钥或可操作的线上业务接口"
+links:
+  demo: null
+  repo: null
+---
+
+## 项目说明
+
+AegisGift 将企业节日礼赠从“选品—询价—采购—审批—履约”串成一条可追踪流程。企业用户侧负责提交采购需求和查看订单，运营侧维护商品与供应链数据，审批人按企业阈值处理采购单，库存服务在下单、取消和完成之间维护可用量。
+
+## 技术架构
+
+```text
+Vue 3 + Vite + Element Plus + lucide-vue-next（运营后台）
+                         │ REST / JSON
+Spring Boot 3.5 + Java 21（aegisgift-server）
+  ├─ Controller / Service / Mapper（MyBatis）
+  ├─ JWT：管理员与企业账号双鉴权
+  ├─ Redis：缓存、库存状态与短期协调
+  ├─ MySQL：礼品、供应商、企业、订单、库存流水
+  ├─ Spring AI：可选的推荐叙述增强
+  └─ pgvector：采购知识文档向量检索（RAG）
+```
+
+## 展示范围
+
+作品集展示登录、礼品/礼盒、分类、供应商、库存、订单、审批、智能选品和知识问答等 11 张真实运行截图。项目源码位于本地工作区，未复制进本仓库，也不提供公开仓库链接。
