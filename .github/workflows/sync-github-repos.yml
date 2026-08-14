@@ -1,4 +1,4 @@
-name: Sync public GitHub repositories
+name: Sync public portfolio data
 
 on:
   workflow_dispatch:
@@ -17,6 +17,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api --paginate "/users/monikahahaha26-collab/repos?per_page=100&type=public&sort=updated" --jq '[.[] | {name, description, html_url, language, topics, updated_at, homepage}]' > data/github-repos.json
+      - name: Fetch Bilibili anime and Steam games
+        run: node scripts/sync-off-duty.mjs
       - name: Commit cache when changed
         run: |
-          git diff --quiet data/github-repos.json || (git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add data/github-repos.json && git commit -m "chore: sync public repositories" && git push)
+          git diff --quiet data/github-repos.json data/off-duty.json public/media/anime || (git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add data/github-repos.json data/off-duty.json public/media/anime && git commit -m "chore: sync public portfolio data" && git push)

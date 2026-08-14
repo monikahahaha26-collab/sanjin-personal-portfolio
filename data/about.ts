@@ -1,13 +1,13 @@
 export const personalInfo = {
-  name: "YOUR NAME",
+  name: "赵佳毅",
   title: "电子信息工程 · AI 应用开发 / 嵌入式方向",
   tagline: "把传感、数据和模型做成稳定、可验证、能交付的产品。",
   github: "https://github.com/monikahahaha26-collab",
-  email: "your.email@example.com",
-  location: "城市待补充",
-  school: "学校待补充",
-  graduation: "毕业时间待补充",
-  resumeFile: "/SANJIN-Resume.docx",
+  email: "3184221278@qq.com",
+  location: "中国",
+  school: "东北石油大学",
+  graduation: "2027 年 7 月",
+  resumeFile: "/zhao-jiayi-ai-agent-resume.pdf",
 };
 
 export const jobPreference = {
