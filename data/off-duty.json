@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-08-14T02:06:40.014Z",
+  "syncedAt": "2026-08-17T04:02:12.549Z",
   "sources": {
     "bilibili": "https://space.bilibili.com/384702367",
     "steam": "https://steamcommunity.com/profiles/76561199108776666/"
@@ -4753,6 +4753,6 @@
   ],
   "games": [],
   "warnings": [
-    "steam: fetch failed"
+    "steam: Steam game list is unavailable. Confirm the profile and game details are public."
   ]
 }
